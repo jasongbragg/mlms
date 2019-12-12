@@ -78,12 +78,18 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 model.fit(Xt, Yt, validation_data=(Xv, Yv), epochs=3)
 
-predictions = model.predict(Xv)
-vpred = (predictions > 0.5)
-matrix = metrics.confusion_matrix(Yv.argmax(axis=1), vpred.argmax(axis=1))
+Yp = model.predict_classes(Xv)
+
+import tensorflow as tf
+con_mat = tf.math.confusion_matrix(labels=v_cat_array, predictions=Yp).numpy()
+
+#>>> con_mat
+#array([[182,   0,   0,  18],
+#       [  0, 200,   0,   0],
+#       [  0,   1, 198,   1],
+#       [  4,   0,   8, 188]], dtype=int32)
+### in the above, row: real category
+#                 col: pred cstegory
 
 
-# checks 
-# generate_bipar_ibd should be equal to outcrossing when k = 0
-# true?
 
